@@ -111,7 +111,7 @@ export default function BookCard({ book }: { book: bookInterface }) {
 
       <Link
         to={`/book_details/${book.id}`}
-        className="font-medium text-sm text-center max-w-[130px] hover:underline max-h-[40px] line-clamp-2"
+        className="font-medium text-sm text-center max-w-[130px] hover:underline hover:text-[var(--theme-color)] max-h-[40px] line-clamp-2"
         dir="auto"
         title={book.volumeInfo.title}
       >

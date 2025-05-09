@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
-export default function Nav() {
+export default function Nav({
+  searchTerm,
+  setSearchTerm,
+  currentPage,
+  setCurrentPage,
+}: {
+  searchTerm: string;
+  setSearchTerm: (s: string) => void;
+  currentPage: number;
+  setCurrentPage: (c: number) => void;
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuIconRef = useRef<HTMLDivElement>(null);
@@ -22,7 +32,7 @@ export default function Nav() {
   }, []);
   return (
     <>
-      <nav className="sm:px-13 max-sm:px-8 py-4 border-b border-gray-200">
+      <nav className="fixed top-0 w-screen bg-white z-99 sm:px-13 max-sm:px-8 py-2 border-b border-gray-200">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link
@@ -33,12 +43,35 @@ export default function Nav() {
           </Link>
 
           {/* Search Input */}
-          <div className="grow flex justify-center">
-            <input
-              type="text"
-              placeholder="Search by Title, Author, Publisher or ISBN"
-              className="w-[50%] max-sm:w-[80%] border border-gray-300 focus:border-gray-800 rounded-md outline-none py-1 px-2"
-            />
+          <div className="grow flex justify-center items-center">
+            <div className="flex w-[50%] max-sm:w-[80%] border border-gray-300 focus-within:border-gray-800 rounded-md overflow-hidden">
+              <input
+                type="text"
+                placeholder="Search by Title, Author, Publisher or ISBN"
+                className="w-full px-3 py-2 outline-none placeholder:text-gray-500"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(
+                    e.target.value.trim().length === 0 ? 1 : currentPage
+                  );
+                }}
+              />
+              <div className="flex items-center px-3 text-gray-500">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-5 h-5 cursor-pointer"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
           </div>
 
           {/* Burger Menu Icon (Mobile Only) */}
@@ -64,7 +97,7 @@ export default function Nav() {
           {/* Navigation Links */}
           <div
             ref={menuRef}
-            className={`z-[999] max-sm:fixed max-sm:top-[80px] max-sm:right-[5px] max-sm:bg-white max-sm:px-4 max-sm:border max-sm:border-gray-300 rounded-lg max-sm:py-7 transition-all duration-200 
+            className={`text-md z-[999] max-sm:fixed max-sm:top-[80px] max-sm:right-[5px] max-sm:bg-white max-sm:px-4 max-sm:border max-sm:border-gray-300 rounded-lg max-sm:py-7 transition-all duration-200 
               ${isMenuOpen ? "block" : "hidden"} sm:block`}
           >
             <ul className="list-none flex max-sm:flex-col sm:gap-12 gap-5 max-sm:items-center">
@@ -72,7 +105,7 @@ export default function Nav() {
                 <Link
                   to="/home"
                   onClick={handleLinkClick}
-                  className="hover:text-black/60"
+                  className="hover:text-[var(--theme-color)]"
                 >
                   Home
                 </Link>
@@ -81,7 +114,7 @@ export default function Nav() {
                 <Link
                   to="/favorites"
                   onClick={handleLinkClick}
-                  className="hover:text-black/60"
+                  className="hover:text-[var(--theme-color)]"
                 >
                   Favorites
                 </Link>
@@ -90,7 +123,7 @@ export default function Nav() {
                 <Link
                   to="/contact"
                   onClick={handleLinkClick}
-                  className="hover:text-black/60"
+                  className="hover:text-[var(--theme-color)]"
                 >
                   Contact
                 </Link>
@@ -99,7 +132,9 @@ export default function Nav() {
           </div>
         </div>
       </nav>
-      <Outlet />
+      <div className="mt-[130px]">
+        <Outlet />
+      </div>
     </>
   );
 }

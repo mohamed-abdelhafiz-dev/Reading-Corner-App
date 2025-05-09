@@ -125,7 +125,7 @@ export default function Contact() {
           />
         </div>
         <button
-          className="bg-[var(--theme-color)] text-indigo-950 rounded-md py-1 cursor-pointer text-lg hover:bg-[var(--theme-color)]/90"
+          className="bg-[var(--theme-color)] text-white rounded-md py-1 cursor-pointer text-lg font-semibold hover:bg-[var(--theme-color)]/90"
           type="submit"
         >
           Send

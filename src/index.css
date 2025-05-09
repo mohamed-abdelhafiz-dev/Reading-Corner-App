@@ -19,3 +19,13 @@
 @utility input-box {
   @apply border border-gray-400 rounded-sm outline-none focus-within:border-[var(--theme-color)] focus-within:border-2 px-1 py-0.5 caret-[var(--theme-color)]
 }
+
+button:disabled {
+  background-color: #a1a1a1;
+  color: white;
+  cursor: not-allowed;
+}
+
+.placeholder-w::placeholder {
+  width: calc(100% - 25px);
+}
