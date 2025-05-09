@@ -10,7 +10,7 @@ const alertSlice = createSlice({
     description: AlertDesc.successMsgDesc,
   },
   reducers: {
-    setAlert: (state, action) => {
+    setAlert: (_, action) => {
       return action.payload;
     },
   },
