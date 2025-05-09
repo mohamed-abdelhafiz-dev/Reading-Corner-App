@@ -74,7 +74,7 @@ export default function BookCard({ book }: { book: bookInterface }) {
               title="Preview"
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="https://www.w3.org/2000/svg"
                 viewBox="0 0 24 20"
                 fill="currentColor"
                 className="size-4"
@@ -98,7 +98,7 @@ export default function BookCard({ book }: { book: bookInterface }) {
             onClick={handleFavoriteClick} // Prevent propagation here too
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
               className="size-4"

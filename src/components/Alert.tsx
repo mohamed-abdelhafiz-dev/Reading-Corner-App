@@ -31,7 +31,7 @@ const Alert = () => {
         >
           {isSuccess ? (
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
@@ -46,7 +46,7 @@ const Alert = () => {
             </svg>
           ) : (
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
@@ -62,7 +62,9 @@ const Alert = () => {
           )}
         </div>
         <div className="ml-3 flex flex-col">
-          <h5 className={`text-lg font-semibold ${textColor}`}>{alertState.msg}</h5>
+          <h5 className={`text-lg font-semibold ${textColor}`}>
+            {alertState.msg}
+          </h5>
           <p className={`text-sm ${textColor}`}>{alertState.description}</p>
         </div>
       </div>
@@ -71,7 +73,7 @@ const Alert = () => {
         onClick={handleClose}
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="https://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
           className="size-4"
