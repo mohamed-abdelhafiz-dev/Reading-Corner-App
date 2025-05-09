@@ -15,7 +15,6 @@
     "axios": "^1.9.0",
     "bootstrap": "^5.3.6",
     "emailjs-com": "^3.2.0",
-    "lucide-react": "^0.509.0",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.1.0",
