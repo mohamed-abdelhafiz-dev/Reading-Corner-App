@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+  --theme-color: #ff8c00;
+}
+
+@utility absolute-centered {
+  @apply absolute top-[50%] left-[50%] translate-[-50%];
+}
+
+@utility elements-center {
+  @apply flex justify-center items-center;
+}
+
+@utility input-group {
+  @apply flex flex-col gap-2
+}
+
+@utility input-box {
+  @apply border border-gray-400 rounded-sm outline-none focus-within:border-[var(--theme-color)] focus-within:border-2 px-1 py-0.5 caret-[var(--theme-color)]
+}
