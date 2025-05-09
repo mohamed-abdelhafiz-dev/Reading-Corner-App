@@ -1,58 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import BookCard, { type bookInterface } from "../components/BookCard";
-import axios from "axios";
 import Loader from "../components/Loader";
 import Pagination from "../components/Pagination";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBooks } from "../redux/slices/booksSlice";
+import type { AppDispatch, RootState } from "../redux/store";
 
-export default function SearchPage({
-  searchTerm,
-  currentPage,
-  setCurrentPage,
-}: {
-  searchTerm: string;
-  currentPage: number;
-  setCurrentPage: (p: number | ((p: number) => number)) => void;
-}) {
-  const [books, setBooks] = useState<bookInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+export default function SearchPage() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { booksData, isLoading, error } = useSelector(
+    (state: RootState) => state.books
+  );
+  const currentPage = useSelector((state: RootState) => state.currentPage);
+  const searchTerm = useSelector((state: RootState) => state.searchTerm);
 
   useEffect(() => {
     const debounce = setTimeout(() => {
-      axios
-        .get(
-          `https://www.googleapis.com/books/v1/volumes?q=${
-            searchTerm.trim().length ? searchTerm : "best+selling+books"
-          }&startIndex=${
-            (currentPage - 1) * 10
-          }&maxResults=40&key=AIzaSyCbVUR3hZkdiATFodSOl7fz3a9quBOxiEE`
-        )
-        .then((res) => {
-          setBooks(res.data.items);
-        })
-        .catch(() => {
-          setError("Oops Something went wrong.. 🚩");
-        })
-        .finally(() => setLoading(false));
+      dispatch(fetchBooks({ searchTerm, currentPage }));
     }, 1000);
     return () => clearTimeout(debounce);
-  }, [currentPage, searchTerm]);
+  }, [currentPage, searchTerm, dispatch]);
   return (
     <main className="px-[25px] py-10">
-      {loading && <Loader />}
-      {error && (
+      {isLoading && <Loader />}
+
+      {error && !isLoading && (
         <p className="text-red-600 text-xl font-bold absolute-centered">
           {error}
         </p>
       )}
 
-      <div className="grid gap-[50px] grid-cols-[repeat(auto-fill,minmax(120px,1fr))] justify-items-center">
-        {books.map((book) => (
-          <BookCard key={book.id} book={book} />
-        ))}
-      </div>
-      {!loading && !error && (
-        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      {booksData.length > 0 && !error && (
+        <>
+          <div className="grid gap-[50px] grid-cols-[repeat(auto-fill,minmax(120px,1fr))] justify-items-center">
+            {booksData.map((book: bookInterface) => (
+              <BookCard key={book.id} book={book} />
+            ))}
+          </div>
+          <Pagination />
+        </>
       )}
     </main>
   );

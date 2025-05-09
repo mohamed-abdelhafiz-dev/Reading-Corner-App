@@ -7,6 +7,9 @@
 @utility absolute-centered {
   @apply absolute top-[50%] left-[50%] translate-[-50%];
 }
+@utility fixed-centered {
+  @apply fixed top-[50%] left-[50%] translate-[-50%];
+}
 
 @utility elements-center {
   @apply flex justify-center items-center;

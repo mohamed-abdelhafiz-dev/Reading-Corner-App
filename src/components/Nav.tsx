@@ -1,23 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { setSearchTerm } from "../redux/slices/searchTermSlice";
+import type { RootState } from "../redux/store";
+import { setError } from "../redux/slices/booksSlice";
 
-export default function Nav({
-  searchTerm,
-  setSearchTerm,
-  currentPage,
-  setCurrentPage,
-}: {
-  searchTerm: string;
-  setSearchTerm: (s: string) => void;
-  currentPage: number;
-  setCurrentPage: (c: number) => void;
-}) {
+export default function Nav() {
+  const dispatch = useDispatch();
+
+  const searchTerm = useSelector((state: RootState) => state.searchTerm);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuIconRef = useRef<HTMLDivElement>(null);
   const handleLinkClick = () => {
     setIsMenuOpen(false);
   };
+  const navigateTo = useNavigate();
   useEffect(() => {
     document.addEventListener("click", (e) => {
       if (
@@ -46,18 +44,19 @@ export default function Nav({
           <div className="grow flex justify-center items-center">
             <div className="flex w-[50%] max-sm:w-[80%] border border-gray-300 focus-within:border-gray-800 rounded-md overflow-hidden">
               <input
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") navigateTo("/home");
+                }}
                 type="text"
                 placeholder="Search by Title, Author, Publisher or ISBN"
                 className="w-full px-3 py-2 outline-none placeholder:text-gray-500"
                 value={searchTerm}
                 onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setCurrentPage(
-                    e.target.value.trim().length === 0 ? 1 : currentPage
-                  );
+                  dispatch(setError(""));
+                  dispatch(setSearchTerm(e.target.value));
                 }}
               />
-              <div className="flex items-center px-3 text-gray-500">
+              <Link to="/home" className="flex items-center px-3 text-gray-500">
                 <svg
                   xmlns="https://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -70,7 +69,7 @@ export default function Nav({
                     clipRule="evenodd"
                   />
                 </svg>
-              </div>
+              </Link>
             </div>
           </div>
 

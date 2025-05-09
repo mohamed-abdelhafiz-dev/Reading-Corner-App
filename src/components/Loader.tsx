@@ -1,6 +1,6 @@
 export default function Loader() {
   return (
-    <section className="bg-white py-20 dark:bg-dark absolute-centered">
+    <section className=" z-999 dark:bg-dark fixed-centered">
       <div className="container">
         <div className="flex flex-wrap items-center gap-4">
           <div>

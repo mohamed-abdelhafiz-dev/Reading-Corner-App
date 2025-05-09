@@ -1,17 +1,18 @@
-export default function Pagination({
-  currentPage,
-  setCurrentPage,
-}: {
-  currentPage: number;
-  setCurrentPage: (p: number | ((p: number) => number)) => void;
-}) {
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentPage } from "../redux/slices/currentPageSlice";
+import type { RootState } from "../redux/store";
+
+export default function Pagination() {
+  const dispatch = useDispatch();
+  const currentPage = useSelector((state: RootState) => state.currentPage);
+
   return (
     <div className=" py-10 text-center dark:bg-dark">
       <ul className="flex items-center justify-center gap-2">
         <li>
           <button
             disabled={currentPage === 1}
-            onClick={() => setCurrentPage(1)}
+            onClick={() => dispatch(setCurrentPage(1))}
             className="flex h-10 min-w-10 items-center justify-center rounded-lg border border-stroke px-2 text-base font-medium text-[var(--theme-color)] hover:bg-gray-1 hover:bg-[var(--theme-color)] hover:text-white cursor-pointer"
           >
             <span>
@@ -33,7 +34,7 @@ export default function Pagination({
         {[1, 2, 3, 4, 5].map((num) => (
           <li key={num}>
             <button
-              onClick={() => setCurrentPage(num)}
+              onClick={() => dispatch(setCurrentPage(num))}
               className={`cursor-pointer flex h-10 min-w-10 items-center justify-center rounded-lg border border-stroke px-2 text-base font-medium text-[var(--theme-color)] hover:bg-gray-1 ${
                 num === currentPage
                   ? "bg-[var(--theme-color)] text-white hover:bg-[var(--theme-color)]/90"
@@ -48,7 +49,7 @@ export default function Pagination({
         <li>
           <button
             disabled={currentPage === 5}
-            onClick={() => setCurrentPage(5)}
+            onClick={() => dispatch(setCurrentPage(5))}
             className="flex h-10 min-w-10 items-center justify-center rounded-lg border border-stroke px-2 text-base font-medium text-[var(--theme-color)] hover:bg-[var(--theme-color)] hover:text-white cursor-pointer"
           >
             <svg

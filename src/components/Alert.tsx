@@ -1,26 +1,33 @@
-import { useCallback, useEffect } from "react";
-import { useAlert } from "../contexts/AlertContext";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../redux/store";
+import { setAlert } from "../redux/slices/alertSlice";
 
 const Alert = () => {
-  const { alertState, setAlertState } = useAlert();
+  const dispatch = useDispatch();
+  const alertState = useSelector((state: RootState) => state.alert);
   const isSuccess = alertState.status === "success";
   const bgColor = isSuccess ? "bg-green-100" : "bg-red-100";
   const borderColor = isSuccess ? "border-green-500" : "border-red-500";
   const textColor = isSuccess ? "text-green-700" : "text-red-700";
   const iconColor = isSuccess ? "text-green-500" : "text-red-500";
-  const handleClose = useCallback(() => {
-    setAlertState({
-      ...alertState,
-      show: false,
-    });
-  }, [alertState, setAlertState]);
+  const handleClose = () => {
+    dispatch(
+      setAlert({
+        ...alertState,
+        show: false,
+      })
+    );
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       handleClose();
     }, 3000);
-    return () => clearTimeout(timer);
-  }, [handleClose]);
+
+    return () => clearTimeout(timer); // Properly cleaning up the timer
+  }, [alertState.show]); // Re-run the effect whenever alert visibility changes
+
   return alertState.show ? (
     <div
       className={`fixed bottom-5 right-5 p-2 min-w-[500px] rounded-md shadow-lg border ${bgColor} ${borderColor}`}

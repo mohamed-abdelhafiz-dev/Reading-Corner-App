@@ -1,12 +1,13 @@
 import emailjs from "emailjs-com";
 import { useState } from "react";
-import { useAlert } from "../contexts/AlertContext";
 import { AlertDesc, AlertMsg, AlertStatus } from "../constants/alertEnums";
 import Loader from "../components/Loader";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../redux/slices/alertSlice";
 
 export default function Contact() {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const { setAlertState } = useAlert();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,32 +29,38 @@ export default function Contact() {
           "3XwTHbJFA_p53fi9-"
         )
         .then(() => {
-          setAlertState({
-            status: AlertStatus.success,
-            msg: AlertMsg.successMsg,
-            description: AlertDesc.successMsgDesc,
-            show: true,
-          });
+          dispatch(
+            setAlert({
+              status: AlertStatus.success,
+              msg: AlertMsg.successMsg,
+              description: AlertDesc.successMsgDesc,
+              show: true,
+            })
+          );
           setFormData({ name: "", email: "", message: "" });
         })
         .catch(() =>
-          setAlertState({
-            status: AlertStatus.error,
-            msg: AlertMsg.errorMsg,
-            description: AlertDesc.errorMsgDesc,
-            show: true,
-          })
+          dispatch(
+            setAlert({
+              status: AlertStatus.error,
+              msg: AlertMsg.errorMsg,
+              description: AlertDesc.errorMsgDesc,
+              show: true,
+            })
+          )
         )
         .finally(() => {
           setLoading(false);
         });
     } else {
-      setAlertState({
-        status: AlertStatus.error,
-        msg: AlertMsg.emptyFieldMsg,
-        description: AlertDesc.emptyFieldMsgDesc,
-        show: true,
-      });
+      dispatch(
+        setAlert({
+          status: AlertStatus.error,
+          msg: AlertMsg.emptyFieldMsg,
+          description: AlertDesc.emptyFieldMsgDesc,
+          show: true,
+        })
+      );
     }
   }
   function handleInputChange(

@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useFavorites } from "../contexts/FavoritesContext";
+import type { AppDispatch, RootState } from "../redux/store";
+import { addFavorite, removeFavorite } from "../redux/slices/favoritesSlice";
+import { useEffect } from "react";
 
 export interface bookInterface {
   id: string;
@@ -20,11 +22,9 @@ export interface bookInterface {
 }
 
 export default function BookCard({ book }: { book: bookInterface }) {
-  const { favorites, setFavorites } = useFavorites();
-  const [isFavorite, setIsFavorite] = useState(
-    favorites.some((fav) => fav.id === book.id)
-  );
-
+  const dispatch = useDispatch<AppDispatch>();
+  const favorites = useSelector((state: RootState) => state.favorites);
+  const isFavorite = favorites.some((fav) => fav.id === book.id);
   const getBookImage = () => {
     const imageLinks = book?.volumeInfo?.imageLinks;
     return (
@@ -37,22 +37,19 @@ export default function BookCard({ book }: { book: bookInterface }) {
   const previewLink = book?.volumeInfo?.previewLink;
 
   const handleFavoriteClick = () => {
-    setIsFavorite((prev) => !prev);
-  };
-
-  useEffect(() => {
-    if (isFavorite && !favorites.some((fav) => fav.id === book.id)) {
-      setFavorites([...favorites, book]);
-    } else if (!isFavorite) {
-      setFavorites(favorites.filter((fav) => fav.id !== book.id));
+    if (isFavorite) {
+      dispatch(removeFavorite(book));
+    } else {
+      dispatch(addFavorite(book));
     }
-  }, [isFavorite]);
-
+  };
   const cardClasses = "group flex flex-col items-center gap-1 w-fit";
   const imageClasses = "w-[128px] h-[192px] object-cover";
   const buttonClasses =
     "flex items-center gap-1 text-[var(--theme-color)] border rounded-md hover:bg-[var(--theme-color)] hover:text-white duration-200 border-[var(--theme-color)] px-[5px] py-[3px]";
-
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
   return (
     <div className={cardClasses}>
       <div className="relative overflow-hidden border border-black">
