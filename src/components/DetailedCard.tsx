@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addFavorite, removeFavorite } from "../redux/slices/favoritesSlice";
 import type { AppDispatch, RootState } from "../redux/store";
 import type { bookInterface } from "./BookCard";
+import { useEffect } from "react";
 const BookPreviewCard = ({ book }: { book: bookInterface }) => {
   const dispatch = useDispatch<AppDispatch>();
   const favorites = useSelector((state: RootState) => state.favorites);
@@ -19,6 +20,9 @@ const BookPreviewCard = ({ book }: { book: bookInterface }) => {
     }
   };
 
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
   const previewLink = volumeInfo?.previewLink;
 
   // 🔄 Show loader if data isn't ready
